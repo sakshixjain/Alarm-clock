@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock</title>
+    <style>
+
+        body{
+            background-image: url(lachlan-gowen-RZ5TKFpdaWM-unsplash.jpg);
+            background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+          
+        }
+        .bg-image{
+           
+            height: 100%;
+        }
+        .box{
+          backdrop-filter: blur(10px);
+           margin: auto;
+          color: black;
+            border: 2px solid black;
+            border-radius: 20px;
+            height: 500px;
+            width: 420px;
+             justify-content: center;
+            
+        }
+        h1{
+            margin-top: 2rem;
+            display: flex;
+            text-align: center;
+            justify-content: center;
+        }
+#date{
+    font-weight: bold;
+    margin-bottom: 15px;
+    margin-left: 30p;
+    font-size: 23px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#time{
+    
+    font-size: 20px;
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+input{
+    padding: 5px;
+    font-size: 20px;
+    border: 1px solid rgba(236, 233, 233);
+    border-radius: 10px;
+ &:hover{
+    color: rgb(72, 75, 74);
+        background-color: beige;
+        border-color: black;
+}   
+}
+ #AMPM,#alarmHour, #alarmMinutes{
+    text-align: center;
+    margin: 3px;
+    width: 82px;
+    padding: 5px;
+    font-size: 18px;
+    border: 1px solid rgba(236, 233, 233);
+    border-radius: 10px;
+}
+button{
+    font-weight: bold;
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 10px;
+    background-color:transparent;
+    border: 1px;
+    padding: 11px;
+ &:hover{
+    color: rgb(12, 12, 12);
+    border: 1px solid black;
+    background-color: transparent;
+}   
+}
+
+        .clock{
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            padding: 30px;
+        }
+       
+    </style>
+</head>
+<body>
+    <div class="bg-image"></div>
+    <div class="box">
+    <h1>Digital Alarm Clock</h1>
+    <div class="clock">
+    <svg width="100" height="100">
+        <circle cx="50" cy="50" r="40"
+        stroke="white" stroke-width="4" fill="grey"  id="hh"/>
+        <text fill="white" font-size="25" font-family="Verdana" x="25" y="60" id="hours">00</text>
+      </svg>
+      <svg width="100" height="100">
+        <circle cx="50" cy="50" r="40"
+        stroke="white" stroke-width="4" fill="grey" id="mm"/>
+        <text fill="white" font-size="25" font-family="Verdana" x="25" y="60" id="minutes">00</text>
+      </svg>
+      <svg width="100" height="100">
+        <circle cx="50" cy="50" r="40"
+        stroke="white" stroke-width="4" fill="grey" id="ss"/>
+        <text fill="white" font-size="25" font-family="Verdana" x="25" y="60" id="seconds">00</text>
+      </svg>
+     <div id="ap"><h2
+        id="ampm">AM</h2></div>
+    </div>
+    <div>
+        <div id="date">Date : &nbsp; <input type="date" >
+        </div>
+
+          <p id="date">Alarm at :&nbsp; <span id="spanTime"></span></p>
+
+        <form><div id="time">
+            <input type="number" id="alarmHour" placeholder="hours">
+     <input type="number" id="alarmMinutes" placeholder="minutes">
+     <select name="" id="AMPM">
+     <option value="AM">AM</option>
+     <option value="PM">PM</option>
+     </select>
+   
+    
+        </div></form>
+       <div id="time"> <button onclick="setAlarm()">Set Alarm</button>
+        <button onclick="clearAlarm()"> Clear Alarm</button>
+    </div>
+  <audio src="download-ringtone-807-funonsite-com-40938.mp3"    id="alarmSound" ></audio>
+    </div>
+
+</div>
+    <script>
+ setInterval(() => {
+    let hours = document.getElementById("hours");
+    let minutes = document.getElementById("minutes");
+    let seconds = document.getElementById("seconds");
+    let ampm = document.getElementById("ampm");
+
+let hh= document.getElementById("hh");
+let mm = document.getElementById("mm");
+let ss= document.getElementById("ss");
+
+let h= new Date(). getHours();
+let m = new Date(). getMinutes();
+let s = new Date(). getSeconds();
+
+let ap = h>=12 ? "PM": "AM";
+
+if(h>12){
+    h=h-12;
+}
+
+h = h<10? '0' +h : h;
+m = m<10? '0' +m :m;
+s= s<10 ? '0' +s: s;
+ 
+hours.innerHTML = h +'h';
+minutes.innerHTML = m +'m';
+seconds.innerHTML = s + 's';
+ampm.innerHTML =ap;
+
+ }, 1000);
+
+
+function setAlarm(){
+
+    let hr = alarmHour.value;
+    let mn = alarmMinutes.value;
+    spanTime.innerHTML = hr+ ":" + mn+ ":00";
+}
+
+let checkInterval = setInterval(() => {
+    let alarmTime= spanTime.innerHTML;
+    alarmTime =alarmTime.split(':');
+    let aHours =alarmTime[0];
+    let aMinutes= alarmTime[1];
+    let systemTime= new Date();
+    let systemHours = systemTime.getHours();
+    let systemMinutes= systemTime.getMinutes();
+    if(systemHours>12){
+        systemHours= systemHours-12;
+    }
+    if(aHours==systemHours && aMinutes==systemMinutes){
+      alarmSound.play();
+    }
+}, 1000);
+
+function clearAlarm(){
+    spanTime.innerHTML = "00:00 ";
+    alarmSound.pause();
+    alarmSound.currentTime =0;
+}
+    </script>
+</body>
+</html>
